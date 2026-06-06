@@ -1,13 +1,22 @@
 import React, { useRef, useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-// Adjusted import path for the video
+import { motion, AnimatePresence } from 'framer-motion';
 import heroVideo from '../assets/hero video/Developer_introduces_self_and_sk…_202606051918.mp4';
 
 const Hero = () => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [titleIndex, setTitleIndex] = useState(0);
+
+  const rotatingTitles = [
+    'Full Stack Developer',
+    'MERN Developer',
+    'AI Engineer',
+    'Computer Vision Enthusiast',
+    'Backend Developer'
+  ];
 
   useEffect(() => {
     AOS.init({
@@ -15,7 +24,12 @@ const Hero = () => {
       once: true,
       easing: 'ease-out'
     });
-    // Video does NOT autoplay anymore
+
+    const titleInterval = setInterval(() => {
+      setTitleIndex((prev) => (prev + 1) % rotatingTitles.length);
+    }, 2500);
+
+    return () => clearInterval(titleInterval);
   }, []);
 
   const toggleVideo = (e) => {
@@ -32,103 +46,130 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-black">
+    <section id="home" className="relative w-full min-h-screen overflow-hidden bg-black flex flex-col justify-center">
       {/* Background Video */}
       <video
         ref={videoRef}
         loop
         muted={isMuted}
         playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-40 filter grayscale brightness-50"
       >
         <source src={heroVideo} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
+      {/* Dark Overlay Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10 pointer-events-none" />
+
       {/* Content Container */}
-      <div className="absolute inset-0 z-20 px-6 pb-20 md:pb-[8%] md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-end md:justify-between items-start md:items-end text-left w-full">
+      <div className="relative z-20 px-6 pt-32 pb-16 md:px-12 max-w-7xl mx-auto flex flex-col justify-between w-full h-full min-h-screen">
         
         {/* Left Side: Text and Buttons */}
-        <div className="flex flex-col items-start text-left max-w-2xl w-full">
+        <div className="flex-1 flex flex-col justify-center items-start text-left max-w-3xl w-full">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/25 text-red-500 text-xs md:text-sm font-bold tracking-wider uppercase mb-6" data-aos="fade-down">
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+            Welcome to my portfolio
+          </div>
+
           {/* Main Heading */}
           <h1 
             data-aos="fade-up"
-            className="text-white text-3xl md:text-5xl font-bold mb-4 tracking-tight"
+            className="text-white text-4xl sm:text-5xl md:text-7xl font-black mb-4 tracking-tight leading-tight"
           >
-            Hi, I’m a <br /> <span className="text-transparent [-webkit-text-stroke:1.5px_black]">Full Stack Developer</span>
+            Hi, I'm <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-red-500">
+              Divyanshu Nath Tripathi
+            </span>
           </h1>
 
-          {/* Subheading */}
+          {/* Rotating Subtitles */}
+          <div className="h-10 md:h-14 overflow-hidden mb-6" data-aos="fade-up" data-aos-delay="100">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={titleIndex}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -20, opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="text-red-500 text-xl md:text-3xl font-extrabold tracking-wide uppercase"
+              >
+                {rotatingTitles[titleIndex]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
+          {/* Description */}
           <p 
             data-aos="fade-up"
             data-aos-delay="200"
-            className="text-white text-sm md:text-lg font-semibold mb-8 max-w-md drop-shadow-md"
+            className="text-gray-300 text-sm sm:text-base md:text-lg font-medium mb-10 max-w-xl leading-relaxed"
           >
-            I build fast, scalable and modern web applications using React, Node.js and Tailwind CSS.
+            Building scalable web applications, AI-powered systems, computer vision solutions, and modern digital experiences using MERN, Node.js, React, Python, and Machine Learning.
           </p>
 
           {/* Buttons */}
           <div 
             data-aos="fade-up"
-            data-aos-delay="400"
-            className="flex flex-row flex-wrap items-center gap-3 w-full"
+            data-aos-delay="300"
+            className="flex flex-wrap items-center gap-4 w-full"
           >
-            {/* Primary Button */}
-            <button className="px-4 py-2 md:px-6 md:py-2 text-xs md:text-base rounded-full bg-white text-black font-semibold hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 shadow-md">
-              View My Work
-            </button>
+            <a href="#projects" className="px-6 py-3 text-sm md:text-base rounded-full bg-red-600 text-white font-bold hover:bg-red-700 hover:shadow-[0_0_20px_rgba(239,68,68,0.5)] transition-all duration-300 transform hover:scale-105">
+              View Projects
+            </a>
             
-            {/* Secondary Button - Glassmorphism style */}
-            <button className="px-4 py-2 md:px-6 md:py-2 text-xs md:text-base rounded-full bg-black/40 border border-white text-white font-semibold hover:bg-black/60 transition-all duration-300 backdrop-blur-md">
+            <a href="/resume.pdf" download className="px-6 py-3 text-sm md:text-base rounded-full bg-white text-black font-bold hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              Download Resume
+            </a>
+
+            <a href="#contact" className="px-6 py-3 text-sm md:text-base rounded-full bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all duration-300 backdrop-blur-md">
               Contact Me
-            </button>
+            </a>
           </div>
         </div>
 
-        {/* Right Side: Play Video Button */}
-        <div 
-          data-aos="zoom-in"
-          data-aos-delay="600"
-          className="mt-8 md:mt-0 flex flex-row md:flex-col items-center gap-2 md:gap-3 cursor-pointer group self-start md:self-auto"
-          onClick={toggleVideo}
-        >
-          <div className="w-12 h-12 md:w-20 md:h-20 rounded-full border border-white/30 bg-black/20 backdrop-blur-md flex justify-center items-center group-hover:scale-110 group-hover:bg-[#ff2a2a] transition-all duration-500 shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_40px_rgba(255,42,42,0.6)]">
-            {!isPlaying || isMuted ? (
-              // Play Icon
-              <svg className="w-5 h-5 md:w-8 md:h-8 text-white ml-0.5 md:ml-1" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            ) : (
-              // Pause Icon
-              <svg className="w-5 h-5 md:w-8 md:h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-              </svg>
-            )}
+        {/* Bottom Section: Stats Cards & Play button */}
+        <div className="mt-12 w-full flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
+          {/* Stats Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full lg:max-w-4xl" data-aos="fade-up" data-aos-delay="400">
+            {[
+              { val: '3+', label: 'Projects' },
+              { val: '10+', label: 'Technologies' },
+              { val: '1+', label: 'Internship Exp.' },
+              { val: '5+', label: 'Certifications' }
+            ].map((stat, idx) => (
+              <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md hover:border-red-500/50 hover:bg-white/10 transition-all duration-300">
+                <p className="text-2xl sm:text-3xl font-black text-red-500 mb-1">{stat.val}</p>
+                <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">{stat.label}</p>
+              </div>
+            ))}
           </div>
-          <span className="text-white text-[10px] md:text-xs font-bold tracking-widest uppercase opacity-70 group-hover:opacity-100 transition-opacity">
-            {!isPlaying || isMuted ? "Play Reel" : "Pause"}
-          </span>
-        </div>
-      </div>
 
-      {/* Scroll Indicator */}
-      <div 
-        data-aos="fade-up"
-        data-aos-delay="800"
-        className="hidden md:block absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 pointer-events-none"
-      >
-        <div className="animate-bounce">
-          <svg 
-            className="w-6 h-6 text-black drop-shadow-[0_1px_2px_rgba(255,255,255,0.6)]" 
-            fill="none" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth="3" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
+          {/* Play/Pause control for Reel */}
+          <div 
+            data-aos="zoom-in"
+            data-aos-delay="500"
+            className="flex items-center gap-3 cursor-pointer group shrink-0"
+            onClick={toggleVideo}
           >
-            <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-          </svg>
+            <div className="w-12 h-12 rounded-full border border-white/30 bg-black/20 backdrop-blur-md flex justify-center items-center group-hover:scale-110 group-hover:bg-red-600 transition-all duration-500 shadow-[0_0_20px_rgba(255,255,255,0.05)] group-hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]">
+              {isPlaying && !isMuted ? (
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              )}
+            </div>
+            <span className="text-white text-xs font-bold tracking-widest uppercase opacity-75 group-hover:opacity-100 transition-opacity">
+              {isPlaying && !isMuted ? "Pause Reel" : "Play Reel"}
+            </span>
+          </div>
         </div>
       </div>
     </section>
