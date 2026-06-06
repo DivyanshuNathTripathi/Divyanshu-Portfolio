@@ -1,11 +1,11 @@
 import React from 'react';
-import stackImage from '../assets/about/image.png';
+import stackImage from '../assets/about/divyanshu_img.jpeg';
 
 const About = () => {
   const educationTimeline = [
     {
       institution: "MMMUT Gorakhpur",
-      degree: "B.Tech CSE (Lateral Entry)",
+      degree: "B.Tech CSE",
       period: "2024–2027",
       details: "CGPA: 7.61"
     },
@@ -18,13 +18,13 @@ const About = () => {
     {
       institution: "Class XII",
       degree: "Senior Secondary Education",
-      period: "2020–2021",
+      period: "2020",
       details: "Percentage: 76%"
     },
     {
       institution: "Class X",
       degree: "Secondary Education",
-      period: "2018–2019",
+      period: "2018",
       details: "Percentage: 72.8%"
     }
   ];
