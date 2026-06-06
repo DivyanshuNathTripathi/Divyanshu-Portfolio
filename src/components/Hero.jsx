@@ -40,7 +40,12 @@ const Hero = () => {
       />
 
       {/* Dark Overlay Gradients for seamless text contrast and blending */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 md:via-black/50 to-transparent z-10 pointer-events-none" />
+      <div 
+        className="absolute inset-0 z-10 pointer-events-none" 
+        style={{
+          background: 'linear-gradient(to right, #000000 30%, rgba(0, 0, 0, 0.95) 45%, rgba(0, 0, 0, 0.5) 60%, transparent 75%)'
+        }}
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 pointer-events-none" />
 
       {/* Content Container */}
