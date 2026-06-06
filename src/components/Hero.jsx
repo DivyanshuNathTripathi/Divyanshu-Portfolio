@@ -35,7 +35,7 @@ const Hero = () => {
       <img
         src={heroImage}
         alt="Background"
-        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-30 filter grayscale brightness-50"
+        className="absolute top-0 left-0 w-full h-full object-cover object-top z-0 opacity-30 filter grayscale brightness-50"
       />
 
       {/* Dark Overlay Gradient */}
