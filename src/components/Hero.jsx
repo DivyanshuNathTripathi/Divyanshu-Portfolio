@@ -1,13 +1,10 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import heroVideo from '../assets/hero video/Developer_introduces_self_and_sk…_202606051918.mp4';
+import heroImage from '../assets/about/divyanshu_img.jpeg';
 
 const Hero = () => {
-  const videoRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
   const [titleIndex, setTitleIndex] = useState(0);
 
   const rotatingTitles = [
@@ -32,32 +29,14 @@ const Hero = () => {
     return () => clearInterval(titleInterval);
   }, []);
 
-  const toggleVideo = (e) => {
-    e.stopPropagation();
-    if (videoRef.current) {
-      if (videoRef.current.paused) {
-        videoRef.current.play();
-        setIsPlaying(true);
-      } else {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      }
-    }
-  };
-
   return (
     <section id="home" className="relative w-full min-h-screen overflow-hidden bg-black flex flex-col justify-center">
-      {/* Background Video */}
-      <video
-        ref={videoRef}
-        loop
-        muted={isMuted}
-        playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-40 filter grayscale brightness-50"
-      >
-        <source src={heroVideo} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      {/* Background Image */}
+      <img
+        src={heroImage}
+        alt="Background"
+        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-30 filter grayscale brightness-50"
+      />
 
       {/* Dark Overlay Gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10 pointer-events-none" />
@@ -131,10 +110,10 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Bottom Section: Stats Cards & Play button */}
+        {/* Bottom Section: Stats Cards */}
         <div className="mt-12 w-full flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
           {/* Stats Row */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full lg:max-w-4xl" data-aos="fade-up" data-aos-delay="400">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full" data-aos="fade-up" data-aos-delay="400">
             {[
               { val: '3+', label: 'Projects' },
               { val: '10+', label: 'Technologies' },
@@ -146,29 +125,6 @@ const Hero = () => {
                 <p className="text-gray-400 text-xs font-bold uppercase tracking-wider">{stat.label}</p>
               </div>
             ))}
-          </div>
-
-          {/* Play/Pause control for Reel */}
-          <div 
-            data-aos="zoom-in"
-            data-aos-delay="500"
-            className="flex items-center gap-3 cursor-pointer group shrink-0"
-            onClick={toggleVideo}
-          >
-            <div className="w-12 h-12 rounded-full border border-white/30 bg-black/20 backdrop-blur-md flex justify-center items-center group-hover:scale-110 group-hover:bg-red-600 transition-all duration-500 shadow-[0_0_20px_rgba(255,255,255,0.05)] group-hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]">
-              {isPlaying && !isMuted ? (
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              )}
-            </div>
-            <span className="text-white text-xs font-bold tracking-widest uppercase opacity-75 group-hover:opacity-100 transition-opacity">
-              {isPlaying && !isMuted ? "Pause Reel" : "Play Reel"}
-            </span>
           </div>
         </div>
       </div>
